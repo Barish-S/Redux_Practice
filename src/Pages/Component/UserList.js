@@ -5,6 +5,7 @@ import axios from 'axios';
 import { useSelector } from 'react-redux/es/hooks/useSelector';
 import { useDispatch } from 'react-redux';
 import { setData } from '../../Reducer/userSlice';
+import { setViewId } from '../../Reducer/userSlice';
 function UserList(props) {
     let name = useSelector((state) => state.user.allData)
     let navigate = useNavigate();
@@ -14,14 +15,17 @@ function UserList(props) {
         getApiData();
     }, [])
 
+    function setId(id){
+        dispatch(setViewId(id))
+        localStorage.setItem("guest_user",true)
+    }
+
     const getApiData = () => {
-        if (localStorage.getItem("auth_token")) {
+
             axios.get("http://agaram.academy/api/action.php?request=getAllMembers").then(function (response) {
                 dispatch(setData(response.data.data))
             })
-        } else {
-            navigate('/')
-        }
+        
     }
 
     function deleteUser(userId) {
@@ -51,7 +55,7 @@ function UserList(props) {
                                 <td>{data.id}</td>
                                 <td>{data.name}</td>
                                 <td>{data.email}</td>
-                                <td><Link to={`/user/${data.id}`}>View</Link></td>
+                                <td>{localStorage.getItem("auth_token")?<Link to={`/user/${data.id}`}>View</Link>:<Link to={'/'} onClick={()=>setId(data.id)}>View</Link>}</td>
                                 {props.isDeleteVisible?<td><button type='button' onClick={() => deleteUser(data.id)}>Delete</button></td>:null}
                             </tr>
                         )

@@ -14,7 +14,8 @@ export const userSlice = createSlice({
       email: "",
       password: "",
       address:"",
-    }
+    },
+    guest:0
 
   },
   reducers: {
@@ -32,10 +33,13 @@ export const userSlice = createSlice({
     },
     setRegData: (state, action) => {
       state.regData = action.payload
+    },
+    setViewId: (state, action) => {
+      state.guest = action.payload
     }
   },
 })
 
-export const { setData, logoutAction, logAction, setDataById, setRegData } = userSlice.actions
+export const { setData, logoutAction, logAction, setDataById, setRegData,setViewId } = userSlice.actions
 
 export default userSlice.reducer

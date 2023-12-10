@@ -6,6 +6,7 @@ import { useSelector } from 'react-redux/es/hooks/useSelector';
 import Table from 'react-bootstrap/Table';
 import { setDataById } from '../Reducer/userSlice';
 import UserList from './Component/UserList';
+import SignOut from './Component/Signout';
 
 function UserDetails() {
     let dispatch = useDispatch();
@@ -32,7 +33,7 @@ function UserDetails() {
 
     return (
         <>
-
+            <SignOut/>
             <h2>User Details</h2>
             <h3>{JSON.stringify(userId)}</h3>
             <Table striped bordered hover>
