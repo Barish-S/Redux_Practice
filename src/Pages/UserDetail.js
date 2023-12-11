@@ -3,8 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { useSelector } from 'react-redux/es/hooks/useSelector';
-import Table from 'react-bootstrap/Table';
-import { setDataById } from '../Reducer/userSlice';
+import { setDataById,setLoadStatus } from '../Reducer/userSlice';
 import UserList from './Component/UserList';
 import SignOut from './Component/Signout';
 
@@ -12,16 +11,21 @@ function UserDetails() {
     let dispatch = useDispatch();
     let navigate = useNavigate();
     let { userId } = useParams()
-    let dataById = useSelector((state) => state.user.DataById)
+    let DataById = useSelector((state) => state.user.DataById)
+    let status = useSelector((state) => state.user.loadStatus)
 
     useEffect(() => {
+
+        dispatch(setLoadStatus(true))
         UserData();
+        
     }, [userId])
 
     const UserData = () => {
         if (localStorage.getItem("auth_token")) {
             axios.get(`https://agaram.academy/api/action.php?request=getMemberDetail&id=${userId}`).then(function (response) {
                 console.log(response.data.data)
+                dispatch(setLoadStatus(false))
                 dispatch(setDataById(response.data.data))
             })
         } else {
@@ -31,12 +35,12 @@ function UserDetails() {
 
 
 
+
     return (
         <>
             <SignOut/>
-            <h2>User Details</h2>
-            <h3>{JSON.stringify(userId)}</h3>
-            <Table striped bordered hover>
+            {status==false?<h2>Welcome {DataById.name} ID:{JSON.stringify(userId)}</h2>:<img src='https://i.stack.imgur.com/hzk6C.gif' />}
+            {/* <Table striped bordered hover>
                 <thead>
                     <tr>
                         <th>ID</th>
@@ -59,7 +63,7 @@ function UserDetails() {
 
                     </tr>
                 </tbody>
-            </Table>
+            </Table> */}
             <UserList isDeleteVisible={true}/>
 
 

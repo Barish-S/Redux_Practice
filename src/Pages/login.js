@@ -21,49 +21,55 @@ function Login() {
     }
   }, [])
 
-  function checkUser() {
-    if(localStorage.getItem("guest_user")){
-      localStorage.setItem('auth_token', true)
-      localStorage.removeItem("guest_user")
-      navigate(`user/${guest}`)
-    }else{
-    axios.post("http://agaram.academy/api/action.php?request=getAllMembers").then(function (response) {
-      console.log(response.data)
-      localStorage.setItem('auth_token', true)
-      dispatch(setData(response.data.data))
-      navigate("/home")
-
-    })}
-  }
   // function checkUser() {
+  //   if(localStorage.getItem("guest_user")){
+  //     localStorage.setItem('auth_token', true)
+  //     localStorage.removeItem("guest_user")
+  //     navigate(`user/${guest}`)
+  //   }else{
   //   axios.post("http://agaram.academy/api/action.php?request=getAllMembers").then(function (response) {
   //     console.log(response.data)
-  //     let validate = response.data.data
-  //     if(logData.email==regData.email&&logData.password==regData.password){
-  //       localStorage.setItem('auth_token', true)
+  //     localStorage.setItem('auth_token', true)
   //     dispatch(setData(response.data.data))
   //     navigate("/home")
-  //     }else{
-  //       alert("Incorrect Details")
-  //     }
 
-
-  //   })
+  //   })}
   // }
+
+  function checkUser() {
+    axios.post(`http://agaram.academy/api/action.php?request=candidate_login&email=${logData.email}&password=${logData.password}`).then(function (response) {
+      console.log(response.data)
+      if (response.data.status == "success") {
+        if (guest!=0) {
+          localStorage.setItem('auth_token', true)
+          navigate(`user/${guest}`)
+        } else {
+          localStorage.setItem('auth_token', true)
+          navigate("/home")
+
+        }
+      } else {
+        alert("Wrong Details")
+      }
+
+
+    })
+
+  }
 
   return (
     <Form>
       <h2>Login Page</h2><br />
-      {/* <b>{JSON.stringify(logData)}</b> */}
+      <b>{JSON.stringify(logData)}</b>
 
       <Form.Group className="mb-3" controlId="formBasicEmail">
         <Form.Label>Email address</Form.Label>
-        <Form.Control type="email" defaultValue={"barish@gmail.com"} onKeyUp={(e) => dispatch(logAction({ ...logData, email: e.target.value }))} placeholder="Enter email" />
+        <Form.Control type="email" defaultValue={"ajay@gmail.com"} onKeyUp={(e) => dispatch(logAction({ ...logData, email: e.target.value }))} placeholder="Enter email" />
       </Form.Group>
 
       <Form.Group className="mb-3" controlId="formBasicPassword">
         <Form.Label>Password</Form.Label>
-        <Form.Control type="password" defaultValue={"pass@123"} onKeyUp={(e) => dispatch(logAction({ ...logData, password: e.target.value }))} placeholder="Password" />
+        <Form.Control type="password" defaultValue={"123456"} onKeyUp={(e) => dispatch(logAction({ ...logData, password: e.target.value }))} placeholder="Password" />
       </Form.Group>
 
       <Button type='button' onClick={() => checkUser()}>Submit</Button>

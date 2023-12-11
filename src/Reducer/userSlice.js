@@ -15,7 +15,8 @@ export const userSlice = createSlice({
       password: "",
       address:"",
     },
-    guest:0
+    guest:0,
+    loadStatus:{}
 
   },
   reducers: {
@@ -36,10 +37,13 @@ export const userSlice = createSlice({
     },
     setViewId: (state, action) => {
       state.guest = action.payload
+    },
+    setLoadStatus:(state, action)=>{
+      state.loadStatus=action.payload
     }
   },
 })
 
-export const { setData, logoutAction, logAction, setDataById, setRegData,setViewId } = userSlice.actions
+export const { setData, logoutAction, logAction, setDataById, setRegData,setViewId,setLoadStatus } = userSlice.actions
 
 export default userSlice.reducer

@@ -1,6 +1,7 @@
 import Table from 'react-bootstrap/Table';
+import Button from 'react-bootstrap/Button';
 import { useEffect} from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import axios from 'axios';
 import { useSelector } from 'react-redux/es/hooks/useSelector';
 import { useDispatch } from 'react-redux';
@@ -8,17 +9,11 @@ import { setData } from '../../Reducer/userSlice';
 import { setViewId } from '../../Reducer/userSlice';
 function UserList(props) {
     let name = useSelector((state) => state.user.allData)
-    let navigate = useNavigate();
     let dispatch = useDispatch();
 
     useEffect(() => {
         getApiData();
     }, [])
-
-    function setId(id){
-        dispatch(setViewId(id))
-        localStorage.setItem("guest_user",true)
-    }
 
     const getApiData = () => {
 
@@ -55,8 +50,8 @@ function UserList(props) {
                                 <td>{data.id}</td>
                                 <td>{data.name}</td>
                                 <td>{data.email}</td>
-                                <td>{localStorage.getItem("auth_token")?<Link to={`/user/${data.id}`}>View</Link>:<Link to={'/'} onClick={()=>setId(data.id)}>View</Link>}</td>
-                                {props.isDeleteVisible?<td><button type='button' onClick={() => deleteUser(data.id)}>Delete</button></td>:null}
+                                <td>{localStorage.getItem("auth_token")?<Link to={`/user/${data.id}`}>View</Link>:<Link to={'/'} onClick={()=>dispatch(setViewId(data.id))}>View</Link>}</td>
+                                {props.isDeleteVisible?<td><Button type='button' variant="outline-danger" onClick={() => deleteUser(data.id)}>Delete</Button></td>:null}
                             </tr>
                         )
                     })}
